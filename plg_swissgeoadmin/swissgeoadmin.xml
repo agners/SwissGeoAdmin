@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="1.6" type="plugin" group="content">
+	<name>plg_content_swissgeoadmin</name>
+	<creationDate>August 2011</creationDate>
+	<author>Stefan Agner</author>
+	<authorEmail>stefan@agner.ch</authorEmail>
+	<authorUrl>http://blog.agner.ch</authorUrl>
+    <copyright>This component is released under the GNU/GPLv3 License</copyright>
+    <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<version>0.1.0</version>
+	<description>plg_content_swissgeoadmin_xml_description</description>
+
+	<files>
+		<filename plugin="swissgeoadmin">swissgeoadmin.php</filename>
+		<filename>index.html</filename>
+		<folder>css</folder>
+	</files>
+	<languages>
+		<language tag="en-GB">en-GB.plg_content_swissgeoadmin.ini</language>
+		<language tag="en-GB">en-GB.plg_content_swissgeoadmin.sys.ini</language>
+		<language tag="de-DE">de-DE.plg_content_swissgeoadmin.ini</language>
+		<language tag="de-DE">de-DE.plg_content_swissgeoadmin.sys.ini</language>
+	</languages>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="map" type="list"
+					default="ch.swisstopo.pixelkarte-farbe"
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_LABEL"
+				>
+					<!-- from http://www.geo.admin.ch/internet/geoportal/de/home/services/geoservices/display_services/api_services/order_form/liste_der_verfuegbaren0.html -->
+					<option value="ch.swisstopo.hiks-dufour">PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_DUFOUR</option>
+					<option value="ch.swisstopo.hiks-siegfried">PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_SIEGFRIED</option>
+					<option value="ch.swisstopo.pixelkarte-farbe">PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_PIXELMAP_COLOR</option>
+					<option value="ch.swisstopo.pixelkarte-grau">PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_PIXELMAP_GRAY</option>
+					<option value="ch.swisstopo.swissimage">PLG_CONTENT_SWISSGEOADMIN_FIELD_MAP_SWISSIMAGE</option>
+				</field>
+				<field name="easting" type="text" default="643600"
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_EASTING_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_EASTING_LABEL" />
+				<field name="northing" type="text" default="207650"
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_NORTHING_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_NORTHING_LABEL" />
+				<field name="zoom" type="integer" 
+				 default="1" first="0" last="11" step="1"
+				 description="PLG_CONTENT_SWISSGEOADMIN_FIELD_ZOOM_DESC"
+				 label="PLG_CONTENT_SWISSGEOADMIN_FIELD_ZOOM_LABEL" />
+				 />
+				<field name="showmousepos" type="checkbox" value="1" 
+				 description="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWMOUSEPOS_DESC"
+				 label="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWMOUSEPOS_LABEL" />
+				 />
+				<field name="height" type="text" default="400"
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_HEIGHT_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_HEIGHT_LABEL" />
+				<field name="width" type="text" default=""
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_WIDTH_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_WIDTH_LABEL" />
+				
+			</fieldset>
+			<fieldset name="layers">
+				<field name="layers" type="checkboxes"
+					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYERS_DESC"
+					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYERS_LABEL"
+				>
+					<!-- from http://www.geo.admin.ch/internet/geoportal/de/home/services/geoservices/display_services/api_services/order_form/liste_der_verfuegbaren.html -->
+					<option value="ch.are.agglomerationen_isolierte_staedte-2000">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_AGGLOMERATIONEN_ISOLIERTE_STAEDTE_2000</option>
+					<option value="ch.are.alpenkonvention">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_ALPENKONVENTION</option>
+					<option value="ch.are.bauzonen-2007">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BAUZONEN_2007</option>
+					<option value="ch.are.belastung-gueterverkehr-bahn-2008">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BELASTUNG_GUETERVERKEHR_BAHN_2008</option>
+					<option value="ch.are.belastung-gueterverkehr-strasse-2008">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BELASTUNG_GUETERVERKEHR_STRASSE_2008</option>
+					<option value="ch.are.belastung-personenverkehr-bahn-2008">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BELASTUNG_PERSONENVERKEHR_BAHN_2008</option>
+					<option value="ch.are.belastung-personenverkehr-strasse-2008">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BELASTUNG_PERSONENVERKEHR_STRASSE_2008</option>
+					<option value="ch.are.beschaeftigtendichte-bz08">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BESCHAEFTIGTENDICHTE_BZ08</option>
+					<option value="ch.are.bevoelkerungsdichte-vz00">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_BEVOELKERUNGSDICHTE_VZ00</option>
+					<option value="ch.are.gemeindetyp-1990-9klassen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_GEMEINDETYP_1990_9KLASSEN</option>
+					<option value="ch.are.gueteklassen_oev">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_GUETEKLASSEN_OEV</option>
+					<option value="ch.are.landschaftstypen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_LANDSCHAFTSTYPEN</option>
+					<option value="ch.are.reisezeit_miv-2005">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_REISEZEIT_MIV_2005</option>
+					<option value="ch.are.reisezeit_oev-2005">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ARE_REISEZEIT_OEV_2005</option>
+					<option value="ch.astra.ivs-gelaendekarte">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ASTRA_IVS_GELAENDEKARTE</option>
+					<option value="ch.astra.ivs-nat">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ASTRA_IVS_NAT</option>
+					<option value="ch.astra.ivs-reg_loc">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_ASTRA_IVS_REG_LOC</option>
+					<option value="ch.babs.kulturgueter">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BABS_KULTURGUETER</option>
+					<option value="ch.bafu.bundesinventare-amphibien">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_AMPHIBIEN</option>
+					<option value="ch.bafu.bundesinventare-auen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_AUEN</option>
+					<option value="ch.bafu.bundesinventare-bln">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_BLN</option>
+					<option value="ch.bafu.bundesinventare-flachmoore">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_FLACHMOORE</option>
+					<option value="ch.bafu.bundesinventare-hochmoore">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_HOCHMOORE</option>
+					<option value="ch.bafu.bundesinventare-jagdbanngebiete">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_JAGDBANNGEBIETE</option>
+					<option value="ch.bafu.bundesinventare-moorlandschaften">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_MOORLANDSCHAFTEN</option>
+					<option value="ch.bafu.bundesinventare-vogelreservate">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_BUNDESINVENTARE_VOGELRESERVATE</option>
+					<option value="ch.bafu.fauna-steinbockkolonien">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_FAUNA_STEINBOCKKOLONIEN</option>
+					<option value="ch.bafu.hydrologie-hydromessstationen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_HYDROLOGIE_HYDROMESSSTATIONEN</option>
+					<option value="ch.bafu.ren-extensive_landwirtschaftsgebiete">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_REN_EXTENSIVE_LANDWIRTSCHAFTSGEBIETE</option>
+					<option value="ch.bafu.ren-feuchtgebiete">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_REN_FEUCHTGEBIETE</option>
+					<option value="ch.bafu.ren-fliessgewaesser_seen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_REN_FLIESSGEWAESSER_SEEN</option>
+					<option value="ch.bafu.ren-trockenstandorte">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_REN_TROCKENSTANDORTE</option>
+					<option value="ch.bafu.schutzgebiete-paerke_nationaler_bedeutung">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SCHUTZGEBIETE_PAERKE_NATIONALER_BEDEUTUNG</option>
+					<option value="ch.bafu.schutzgebiete-ramsar">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SCHUTZGEBIETE_RAMSAR</option>
+					<option value="ch.bafu.schutzgebiete-schweizerischer_nationalpark">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SCHUTZGEBIETE_SCHWEIZERISCHER_NATIONALPARK</option>
+					<option value="ch.bafu.schutzgebiete-wildruhezonen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SCHUTZGEBIETE_WILDRUHEZONEN</option>
+					<option value="ch.bafu.showme-gemeinden_hochwasser">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_GEMEINDEN_HOCHWASSER</option>
+					<option value="ch.bafu.showme-gemeinden_lawinen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_GEMEINDEN_LAWINEN</option>
+					<option value="ch.bafu.showme-gemeinden_rutschungen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_GEMEINDEN_RUTSCHUNGEN</option>
+					<option value="ch.bafu.showme-gemeinden_sturzprozesse">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_GEMEINDEN_STURZPROZESSE</option>
+					<option value="ch.bafu.showme-kantone_hochwasser">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_KANTONE_HOCHWASSER</option>
+					<option value="ch.bafu.showme-kantone_lawinen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_KANTONE_LAWINEN</option>
+					<option value="ch.bafu.showme-kantone_rutschungen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_KANTONE_RUTSCHUNGEN</option>
+					<option value="ch.bafu.showme-kantone_sturzprozesse">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_SHOWME_KANTONE_STURZPROZESSE</option>
+					<option value="ch.bafu.wasser-entnahme">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_WASSER_ENTNAHME</option>
+					<option value="ch.bafu.wasser-leitungen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_WASSER_LEITUNGEN</option>
+					<option value="ch.bafu.wasser-rueckgabe">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BAFU_WASSER_RUECKGABE</option>
+					<option value="ch.bfs.arealstatistik-1985">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BFS_AREALSTATISTIK_1985</option>
+					<option value="ch.bfs.arealstatistik-1997">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BFS_AREALSTATISTIK_1997</option>
+					<option value="ch.bfs.arealstatistik-hintergrund">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BFS_AREALSTATISTIK_HINTERGRUND</option>
+					<option value="ch.bfs.arealstatistik-waldmischungsgrad">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BFS_AREALSTATISTIK_WALDMISCHUNGSGRAD</option>
+					<option value="ch.bfs.gebaeude_wohnungs_register">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BFS_GEBAEUDE_WOHNUNGS_REGISTER</option>
+					<option value="ch.blw.hang_steillagen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BLW_HANG_STEILLAGEN</option>
+					<option value="ch.blw.steil_terrassenlagen_rebbau">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_BLW_STEIL_TERRASSENLAGEN_REBBAU</option>
+					<option value="ch.swisstopo.fixpunkte-agnes">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_FIXPUNKTE_AGNES</option>
+					<option value="ch.swisstopo.fixpunkte-hoehe">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_FIXPUNKTE_HOEHE</option>
+					<option value="ch.swisstopo.fixpunkte-lage">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_FIXPUNKTE_LAGE</option>
+					<option value="ch.swisstopo.geologie-eiszeit-lgm-raster">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_EISZEIT_LGM_RASTER</option>
+					<option value="ch.swisstopo.geologie-geodaesie-bouguer_anomalien">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEODAESIE_BOUGUER_ANOMALIEN</option>
+					<option value="ch.swisstopo.geologie-geodaesie-isostatische_anomalien">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEODAESIE_ISOSTATISCHE_ANOMALIEN</option>
+					<option value="ch.swisstopo.geologie-geologische_karte">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOLOGISCHE_KARTE</option>
+					<option value="ch.swisstopo.geologie-geologischer_atlas">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOLOGISCHER_ATLAS</option>
+					<option value="ch.swisstopo.geologie-geophysik-aeromagnetische_karte_schweiz">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOPHYSIK_AEROMAGNETISCHE_KARTE_SCHWEIZ</option>
+					<option value="ch.swisstopo.geologie-geophysik-deklination">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOPHYSIK_DEKLINATION</option>
+					<option value="ch.swisstopo.geologie-geophysik-geothermie">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOPHYSIK_GEOTHERMIE</option>
+					<option value="ch.swisstopo.geologie-geophysik-inklination">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOPHYSIK_INKLINATION</option>
+					<option value="ch.swisstopo.geologie-geophysik-totalintensitaet">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_GEOPHYSIK_TOTALINTENSITAET</option>
+					<option value="ch.swisstopo.geologie-hydrogeologische_karte-grundwasservorkommen">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_HYDROGEOLOGISCHE_KARTE_GRUNDWASSERVORKOMMEN</option>
+					<option value="ch.swisstopo.geologie-hydrogeologische_karte-grundwasservulnerabilitaet">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_HYDROGEOLOGISCHE_KARTE_GRUNDWASSERVULNERABILITAET</option>
+					<option value="ch.swisstopo.geologie-tektonische_karte">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GEOLOGIE_TEKTONISCHE_KARTE</option>
+					<option value="ch.swisstopo.gg25-bezirk-flaeche.fill">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GG25_BEZIRK_FLAECHE_FILL</option>
+					<option value="ch.swisstopo.gg25-gemeinde-flaeche.fill">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GG25_GEMEINDE_FLAECHE_FILL</option>
+					<option value="ch.swisstopo.gg25-kanton-flaeche.fill">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GG25_KANTON_FLAECHE_FILL</option>
+					<option value="ch.swisstopo.gg25-land-flaeche.fill ">PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYER_CH_SWISSTOPO_GG25_LAND_FLAECHE_FILL </option>
+
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
