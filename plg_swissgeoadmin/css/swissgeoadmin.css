@@ -1,10 +1,10 @@
-#main .geoadmin div.layertree,
+#main .geoadmin div.layertree {
+}
+
 #main .geoadmin div.map {
-	float: left;
 }
 
 #main .geoadmin div.mousepos {
-	clear: both;
 }
 
 #main .geoadmin ul {

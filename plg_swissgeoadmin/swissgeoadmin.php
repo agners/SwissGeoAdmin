@@ -124,6 +124,7 @@ class SwissGeoAdminMap
 		// Merge the user provided parameters with the default paramters...
 		$defaultparam->merge($param);
 		$this->param = $defaultparam;
+		$this->id = '';
 	}
 
 	/**
@@ -137,6 +138,7 @@ class SwissGeoAdminMap
 	public function getHtml() {
 		$height = $this->param->get('height');
 		$width = $this->param->get('width');
+		$showmousepos = $this->param->get('showmousepos');
 		
 		$style_geoadmin = '';
 		if(isset($width) && is_int($width) && intval($width) > 0)
@@ -144,16 +146,31 @@ class SwissGeoAdminMap
 			$style_geoadmin .= 'width:'.$width.'px;';
 		}
 		
-		$id = '';
+		
+		
+		$id = $this->id;
 		$html = '
 			<!-- PlugIn SwissGeoAdmin -->
 			<div class="geoadmin" id="geoadmin'.$id.'" style="'.$style_geoadmin.'">
-				<div class="layertree" id="geoadmin'.$id.'_layertree" style="width:30%;height:'.$height.'px;"></div>
-				<div class="map" id="geoadmin'.$id.'_map" style="width:70%;height:'.$height.'px;"></div>
-				<div class="mousepos" id="geoadmin'.$id.'_mousepos" style="width:250px;height:25px;"></div>
-				<div class="clear:both;" />
-			</div>
-		';
+				<a href="#" onclick="layertreefx'.$id.'.toggle();">Auswahl anzeigen</a>
+				<table style="height:'.$height.'px;">
+					<tbody>
+					<tr>
+						<td class="layertreewrapper" id="geoadmin'.$id.'_layertreewrapper">
+								<div class="layertree" id="geoadmin'.$id.'_layertree"  style="width:200px;"></div>
+						</td>
+						<td style="width: 100%">
+							<div class="map" id="geoadmin'.$id.'_map" style="height:'.$height.'px;"></div>
+						</td>
+					</tr>
+					</tbody>
+				</table>
+			';
+		
+		if($showmousepos)
+			$html .= '<div class="mousepos" id="geoadmin'.$id.'_mousepos" style="width:250px;height:25px;"></div>';
+			
+		$html .= "</div>\n";
 		return $html;
 	}
 	
@@ -180,6 +197,8 @@ class SwissGeoAdminMap
 		
 		// Javascript needed
 		$js = "
+		
+	var layertreefx;
 	window.addEvent('load', function() {
 		//Create an instance of the GeoAdmin API
 		api = new GeoAdmin.API();
@@ -202,8 +221,10 @@ class SwissGeoAdminMap
 			height: $heightint
 		});
 		
+		layertreefx = new Fx.Slide('geoadmin_layertree', { mode: 'horizontal' });
+		
 		// Add a tooltip
-		var tooltip = new GeoAdmin.Tooltip({});
+		var tooltip = new GeoAdmin.Tooltip({ baseUrl: 'http://www.google.ch/'});
 		map.addControl(tooltip);
 		tooltip.activate();";
 	
