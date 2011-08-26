@@ -55,6 +55,11 @@ class plgContentSwissGeoAdmin extends JPlugin
 			// Default parameters
 			$param = $this->params;
 			
+			// Set the system language as default
+			$lang = & JFactory::getLanguage();
+			$langcode = $lang->getTag();
+			$param->set('lang', $langcode);
+			
 			// Loop through each match (support multiple maps on one page)
 			foreach($matches as $match)
 			{
@@ -118,8 +123,12 @@ class SwissGeoAdminMap
 			$param->set('showmousepos', $option[1]);
 		if (preg_match('/height=([^\s]+)/', $options, $option))
 			$param->set('height', $option[1]);
-		if (preg_match('/width=([^\s]+)/', $options, $option))
-			$param->set('width', $option[1]);
+		if (preg_match('/showlayertree=([^\s]+)/', $options, $option))
+			$param->set('showlayertree', $option[1]);
+		if (preg_match('/layertreeopen=([^\s]+)/', $options, $option))
+			$param->set('layertreeopen', $option[1]);
+		if (preg_match('/lang=([^\s]+)/', $options, $option))
+			$param->set('lang', $option[1]);
 	
 		// Merge the user provided parameters with the default paramters...
 		$defaultparam->merge($param);
@@ -138,7 +147,8 @@ class SwissGeoAdminMap
 	public function getHtml() {
 		$height = $this->param->get('height');
 		$width = $this->param->get('width');
-		$showmousepos = $this->param->get('showmousepos');
+		$showmousepos = intval($this->param->get('showmousepos'));
+		$showlayertree = intval($this->param->get('showlayertree'));
 		
 		$style_geoadmin = '';
 		if(isset($width) && is_int($width) && intval($width) > 0)
@@ -152,8 +162,12 @@ class SwissGeoAdminMap
 		$html = '
 			<!-- PlugIn SwissGeoAdmin -->
 			<div class="geoadmin" id="geoadmin'.$id.'" style="'.$style_geoadmin.'">
-				<a href="#" onclick="layertreefx'.$id.'.toggle();">Auswahl anzeigen</a>
-				<table style="height:'.$height.'px;">
+			';
+		if ($showlayertree)
+			$html = '<a href="#" id="geoadmin'.$id.'_togglelayertree" onclick="layertreefx'.$id.'.toggle().chain(changeText());">Auswahl anzeigen</a>
+			
+		';
+		$html .= '<table style="height:'.$height.'px;">
 					<tbody>
 					<tr>
 						<td class="layertreewrapper" id="geoadmin'.$id.'_layertreewrapper">
@@ -189,19 +203,31 @@ class SwissGeoAdminMap
 		$easting = $this->param->get('easting');
 		$northing = $this->param->get('northing');
 		$zoom = $this->param->get('zoom');
-		$showmousepos = $this->param->get('showmousepos');
-		$height = $this->param->get('height');
-		$heightint = intval($height);
-		$width = $this->param->get('width');
+		$showmousepos = intval($this->param->get('showmousepos'));
+		$height = intval($this->param->get('height'));
+		$showlayertree = intval($this->param->get('showlayertree'));
+		$layertreeopen = intval($this->param->get('layertreeopen'));
+		$lang = $this->param->get('lang');
 		 
+		$opentext = JText::_('Open Layers');
+		$closetext = JText::_('Close Layers');
 		
 		// Javascript needed
 		$js = "
 		
 	var layertreefx;
+	
+	function changeText() {
+		console.log($('geoadmin_togglelayertree'));
+		if(layertreefx.open)
+			$('geoadmin_togglelayertree').innerText = '$opentext';
+		else
+			$('geoadmin_togglelayertree').innerText = '$closetext';
+	}
+	
 	window.addEvent('load', function() {
-		//Create an instance of the GeoAdmin API
-		api = new GeoAdmin.API();
+		// Create an instance of the GeoAdmin API
+		api = new GeoAdmin.API({lang: '$lang'});
 
 		//Create a GeoExt map panel placed in the geoadminmap div
 		var map = api.createMap({
@@ -218,10 +244,21 @@ class SwissGeoAdminMap
 		var layertree = new GeoAdmin.LayerTree({
 			map: map,
 			renderTo: 'geoadmin_layertree',
-			height: $heightint
+			height: $height
 		});
 		
-		layertreefx = new Fx.Slide('geoadmin_layertree', { mode: 'horizontal' });
+		// Layertree slide effect..
+		if($showlayertree)
+		{
+			layertreefx = new Fx.Slide('geoadmin_layertree', { mode: 'horizontal' });		
+			if(!$layertreeopen)
+				layertreefx.hide();
+				
+			if(layertreefx.open)
+				$('geoadmin_togglelayertree').innerText = '$closetext';
+			else
+				$('geoadmin_togglelayertree').innerText = '$opentext';
+		}
 		
 		// Add a tooltip
 		var tooltip = new GeoAdmin.Tooltip({ baseUrl: 'http://www.google.ch/'});
@@ -234,6 +271,7 @@ class SwissGeoAdminMap
 						renderTo: 'geoadmin_mousepos',
 						map: map
 					});
+				console.log(mousePosition);
 			";
 		}
 		$js .= "\n});";

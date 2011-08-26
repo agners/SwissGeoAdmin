@@ -51,6 +51,14 @@
 				 description="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWMOUSEPOS_DESC"
 				 label="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWMOUSEPOS_LABEL" />
 				 />
+				<field name="showlayertree" type="checkbox" value="1" 
+				 description="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWLAYERTREE_DESC"
+				 label="PLG_CONTENT_SWISSGEOADMIN_FIELD_SHOWLAYERTREE_LABEL" />
+				 />
+				<field name="layertreeopen" type="checkbox" value="1" 
+				 description="PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYERTREEOPEN_DESC"
+				 label="PLG_CONTENT_SWISSGEOADMIN_FIELD_LAYERTREEOPEN_LABEL" />
+				 />
 				<field name="height" type="text" default="400"
 					description="PLG_CONTENT_SWISSGEOADMIN_FIELD_HEIGHT_DESC"
 					label="PLG_CONTENT_SWISSGEOADMIN_FIELD_HEIGHT_LABEL" />
