@@ -50,6 +50,7 @@ class plgContentSwissGeoAdmin extends JPlugin
 			// Add common stylesheets/javascripts
 			$doc = &JFactory::getDocument();
 			$doc->addScript('http://api.geo.admin.ch/loader.js');
+			$doc->addScript('plugins/content/swissgeoadmin/js/swissgeoadmin.js');
 			$doc->addStyleSheet('plugins/content/swissgeoadmin/css/swissgeoadmin.css');
 			
 			// Default parameters
@@ -61,6 +62,7 @@ class plgContentSwissGeoAdmin extends JPlugin
 			$param->set('lang', $langcode);
 			
 			// Loop through each match (support multiple maps on one page)
+			$pararray = array();
 			foreach($matches as $match)
 			{
 				$wholetag = $match[0];
@@ -69,16 +71,18 @@ class plgContentSwissGeoAdmin extends JPlugin
 				// Create a map object, give it a clone of the default parameters..
 				$map = new SwissGeoAdminMap(clone $param, $options);
 				
-				// Get Javascript and HTML for this map...
-				$js = $map->getJs();
+				// Add settings to array for Javascript...
+				$pararray[] = $map->getParams()->toArray();
+				
+				// HTML for this map...
 				$html = $map->getHtml();
 				
-				// Add javascript...
-				$doc->addScriptDeclaration($js);
-				
-				// ...and inject HTML into the article
+				// Inject HTML into the article
 				$row->text = str_replace($wholetag, $html, $row->text);
 			}
+			// Add javascript...
+			$doc->addScriptDeclaration(SwissGeoAdminMap::getCommonJs($pararray));
+			
 		}
 		
 		return true;
@@ -94,7 +98,8 @@ class plgContentSwissGeoAdmin extends JPlugin
  */
 class SwissGeoAdminMap
 {
-	//private static int $test = 1;
+	// Count's the map to generate and address elements with unique identities
+	private static $idcounter = 0;
 
 	/**
 	 * Constructor
@@ -130,12 +135,37 @@ class SwissGeoAdminMap
 		if (preg_match('/lang=([^\s]+)/', $options, $option))
 			$param->set('lang', $option[1]);
 	
+		// Generate an id for this map
+		$param->set('id', self::$idcounter++);
+		$param->set('opentext', JText::_('Open Layers'));
+		$param->set('closetext', JText::_('Close Layers'));
+	
 		// Merge the user provided parameters with the default paramters...
 		$defaultparam->merge($param);
 		$this->param = $defaultparam;
-		$this->id = '';
+	}
+	
+	
+	public function getParams() {
+		return $this->param;
 	}
 
+	public static function getCommonJs($pararray)
+	{
+		// Common JS which loops through settings array to create maps
+		$json = json_encode($pararray);
+		$js = "
+	var options = ".$json.";
+	window.addEvent('load', function() {
+		// Create map(s) with options from settings array
+		for(i=0;i<options.length;i++)
+			createMap(options[i]);
+		});
+		";
+		
+		return $js;
+	}
+	
 	/**
 	 * Generates HTML code needed for map
 	 *
@@ -147,136 +177,30 @@ class SwissGeoAdminMap
 	public function getHtml() {
 		$height = $this->param->get('height');
 		$width = $this->param->get('width');
-		$showmousepos = intval($this->param->get('showmousepos'));
-		$showlayertree = intval($this->param->get('showlayertree'));
 		
 		$style_geoadmin = '';
 		if(isset($width) && is_int($width) && intval($width) > 0)
-		{
 			$style_geoadmin .= 'width:'.$width.'px;';
-		}
+		else
+			$style_geoadmin .= 'width:100%;';
 		
-		
-		
-		$id = $this->id;
+		$id = intval($this->param->get('id'));
 		$html = '
 			<!-- PlugIn SwissGeoAdmin -->
 			<div class="geoadmin" id="geoadmin'.$id.'" style="'.$style_geoadmin.'">
-			';
-		if ($showlayertree)
-			$html = '<a href="#" id="geoadmin'.$id.'_togglelayertree" onclick="layertreefx'.$id.'.toggle().chain(changeText());">Auswahl anzeigen</a>
-			
-		';
-		$html .= '<table style="height:'.$height.'px;">
+				<table style="height:'.$height.'px;'.$style_geoadmin.'">
 					<tbody>
-					<tr>
-						<td class="layertreewrapper" id="geoadmin'.$id.'_layertreewrapper">
-								<div class="layertree" id="geoadmin'.$id.'_layertree"  style="width:200px;"></div>
-						</td>
+					<tr id="geoadmin'.$id.'_maprow">
 						<td style="width: 100%">
 							<div class="map" id="geoadmin'.$id.'_map" style="height:'.$height.'px;"></div>
 						</td>
 					</tr>
 					</tbody>
 				</table>
-			';
-		
-		if($showmousepos)
-			$html .= '<div class="mousepos" id="geoadmin'.$id.'_mousepos" style="width:250px;height:25px;"></div>';
-			
-		$html .= "</div>\n";
+			</div>
+		';
 		return $html;
 	}
 	
-	/**
-	 * Generates JavaScript code needed for map
-	 *
-	 * @access		protected
-	 * @return		string JavaScript code
-	 
-	 * @since		0.1.0
-	 */
-	public function getJs() {
-		// Load default parameters
-		$layers = implode(',', $this->param->get('layers'));
-		$bglayer = $this->param->get('map');
-		$easting = $this->param->get('easting');
-		$northing = $this->param->get('northing');
-		$zoom = $this->param->get('zoom');
-		$showmousepos = intval($this->param->get('showmousepos'));
-		$height = intval($this->param->get('height'));
-		$showlayertree = intval($this->param->get('showlayertree'));
-		$layertreeopen = intval($this->param->get('layertreeopen'));
-		$lang = $this->param->get('lang');
-		 
-		$opentext = JText::_('Open Layers');
-		$closetext = JText::_('Close Layers');
-		
-		// Javascript needed
-		$js = "
-		
-	var layertreefx;
-	
-	function changeText() {
-		console.log($('geoadmin_togglelayertree'));
-		if(layertreefx.open)
-			$('geoadmin_togglelayertree').innerText = '$opentext';
-		else
-			$('geoadmin_togglelayertree').innerText = '$closetext';
-	}
-	
-	window.addEvent('load', function() {
-		// Create an instance of the GeoAdmin API
-		api = new GeoAdmin.API({lang: '$lang'});
-
-		//Create a GeoExt map panel placed in the geoadminmap div
-		var map = api.createMap({
-			div: 'geoadmin_map',
-			layers: '$layers',
-			bgLayer: '$bglayer',
-			easting: $easting,
-			northing: $northing,
-			zoom: $zoom
-		});
-		
-		
-		// LayerTree
-		var layertree = new GeoAdmin.LayerTree({
-			map: map,
-			renderTo: 'geoadmin_layertree',
-			height: $height
-		});
-		
-		// Layertree slide effect..
-		if($showlayertree)
-		{
-			layertreefx = new Fx.Slide('geoadmin_layertree', { mode: 'horizontal' });		
-			if(!$layertreeopen)
-				layertreefx.hide();
-				
-			if(layertreefx.open)
-				$('geoadmin_togglelayertree').innerText = '$closetext';
-			else
-				$('geoadmin_togglelayertree').innerText = '$opentext';
-		}
-		
-		// Add a tooltip
-		var tooltip = new GeoAdmin.Tooltip({ baseUrl: 'http://www.google.ch/'});
-		map.addControl(tooltip);
-		tooltip.activate();";
-	
-		if($showmousepos) {
-			$js .= "
-				var mousePosition = new GeoAdmin.MousePositionBox({
-						renderTo: 'geoadmin_mousepos',
-						map: map
-					});
-				console.log(mousePosition);
-			";
-		}
-		$js .= "\n});";
-		
-		return $js;
-	}
 	
 }
