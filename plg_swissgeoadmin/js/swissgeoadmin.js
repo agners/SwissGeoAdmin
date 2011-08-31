@@ -1,7 +1,7 @@
 function createMap(options)
 {	
 	// Create an instance of the GeoAdmin API for each map
-	api = new GeoAdmin.API({lang: '$lang'});
+	api = new GeoAdmin.API({lang: options.lang});
 	var id = 'geoadmin' + options.id;
 	// Create layertree elements if needed
 	if(options.showlayertree == "1")
@@ -14,7 +14,7 @@ function createMap(options)
 		// Create link with slide effect
 		var layertreefx = new Fx.Slide(id + '_layertree', { mode: 'horizontal' });
 		var ltlink = new Element('a').set({
-				href: '#', 
+				href: 'javascript:void()', 
 				events: {
 					click: function() {
 						// Change text according to (old) state

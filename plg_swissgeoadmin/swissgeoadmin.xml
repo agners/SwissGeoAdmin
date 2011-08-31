@@ -7,7 +7,7 @@
 	<authorUrl>http://blog.agner.ch</authorUrl>
     <copyright>This component is released under the GNU/GPLv3 License</copyright>
     <license>GNU/GPLv3 http://www.gnu.org/licenses/gpl-3.0.html</license>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<description>plg_content_swissgeoadmin_xml_description</description>
 
 	<files>
