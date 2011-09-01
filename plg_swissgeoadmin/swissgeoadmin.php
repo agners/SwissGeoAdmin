@@ -128,6 +128,8 @@ class SwissGeoAdminMap
 			$param->set('showmousepos', $option[1]);
 		if (preg_match('/height=([^\s]+)/', $options, $option))
 			$param->set('height', $option[1]);
+		if (preg_match('/width=([^\s]+)/', $options, $option))
+			$param->set('width', $option[1]);
 		if (preg_match('/showlayertree=([^\s]+)/', $options, $option))
 			$param->set('showlayertree', $option[1]);
 		if (preg_match('/layertreeopen=([^\s]+)/', $options, $option))
@@ -179,7 +181,7 @@ class SwissGeoAdminMap
 		$width = $this->param->get('width');
 		
 		$style_geoadmin = '';
-		if(isset($width) && is_int($width) && intval($width) > 0)
+		if(isset($width) && intval($width) > 0)
 			$style_geoadmin .= 'width:'.$width.'px;';
 		else
 			$style_geoadmin .= 'width:100%;';
