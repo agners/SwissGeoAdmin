@@ -34,6 +34,8 @@ function createMap(options)
 	var map = api.createMap({
 		div: id + '_map',
 		layers: options.layers,
+		layers_opacity: options.layers_opacity,
+		layers_visibility: options.layers_visibility,
 		bgLayer: options.map,
 		easting: parseFloat(options.easting),
 		northing: parseFloat(options.northing),

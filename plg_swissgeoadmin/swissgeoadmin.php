@@ -118,6 +118,10 @@ class SwissGeoAdminMap
 			$param->set('map', $option[1]);
 		if (preg_match('/layers=([^\s]+)/', $options, $option))
 			$param->set('layers', $option[1]);
+		if (preg_match('/layers_opacity=([^\s]+)/', $options, $option))
+			$param->set('layers_opacity', $option[1]);
+		if (preg_match('/layers_visibility=([^\s]+)/', $options, $option))
+			$param->set('layers_visibility', $option[1]);
 		if (preg_match('/easting=([^\s]+)/', $options, $option))
 			$param->set('easting', $option[1]);
 		if (preg_match('/northing=([^\s]+)/', $options, $option))
